@@ -1,0 +1,23 @@
+Get into the GAMA Java APIGAMA is written in Java and made of tens of Eclipse plugins and projects, thousand of classes, methods and annotations. This section of the wiki should help you have a general idea on how to manipulate GAMA Java API and where to find the proper classes and methods. A general introduction to the GAMA architecture gives a general overview of the organization of Java packages and Eclipse plugins, and should be read first. In the following sub-sections we give a more practical introduction.
+
+Introduction to GAMA Java API
+
+Installing the GIT version
+Architecture of GAMA
+IScope
+
+
+Developing Extensions
+
+Developing Plugins
+Developing Skills
+Developing Statements
+Developing Operators
+Developing Types
+Developing Species
+Developing Control Architectures
+Index of annotations
+
+
+Create a release of Gama
+Generation of the documentation

@@ -1,0 +1,174 @@
+Developing SkillsDefining the class as a skill​
+In this section we will be creating a class "FirstClass", that is included in a package named "skill".
+
+
+Create Package
+
+From the Project Explorer pane, go to your plugin's folder, and then go to the src folder.
+
+
+
+Right click on the src folder. Click on New > Package.
+
+
+
+In the New Java Package dialog, set the Name to "skills".
+
+
+
+Click on Finish. This will create the package "skills".
+
+
+
+
+Create class in the Package
+
+In the Project Explorer, go to the folder of the Plugin. We create the Java class in this package. To do this, right click on the package, then click on New, select Class.
+
+
+
+On the New Java class dialog, set the Name to 'FirstSkill'. Click on Finish.
+
+
+
+Now we have an empty Java class named FirstSkill. Note as well that the GamlAdditions.java file was also automatically added into the gaml/gaml.additions.myFirstPlugin folder.
+
+
+
+
+Using Annotations to define class as a skill​
+Annotations are used to link Java methods and classes to GAML language. Note that GAMA annotations are classes defined into the msi.gama.precompiler.GamlAnnotations class.
+We need to tell GAMA that our class "FirstSkill" will be used as skill. To do that we will use Annotation in writing the code of the class. The annotations for skill is described as follows:
+@skill​
+This annotations Allows to define a new skill (class grouping variables and actions that can be used by agents).
+This annotation contains:
+
+
+name (String): a String representing the skill name in GAML (must be unique throughout GAML).
+
+
+attach_to (set of strings): an array of species names to which the skill will be automatically added (complements the "skills" parameter of species).
+
+
+internal (boolean, false by default): return whether this skill is for internal use only.
+
+
+doc (set of @doc, empty by default): the documentation associated to the skill.
+
+Just before the class declaration, add this line to indicate that this class is a skill named "FirstSkill"
+
+
+
+@skill(name = "FirstSkill")
+
+In line 3, a red broken line under the skill word can be seen. This is an error since at this point in the code. Hover your mouse over the error, and the message box would indicate that the skill cannot be resolved to a type.
+
+To correct this error, we take the suggestion of importing 'skill' (msi.gama.precompiler.GamaAnnotations). Click on this option.
+
+It is a good practice to define all the names of plugins/actions/variables in the IKeyword class, which is located in the plugin msi.gama.common.interfaces.IKeyword.java.
+In this class you can define a string variable which contain the name of your plugin.
+String FIRST_SKILL = "FirstSkill";
+Now that we have defined a global string containing the name of the plugin, we can use it in the annotation and in the code of the class.
+@skill(name = IKeyword.FIRST_SKILL)
+We have now defined that our current class is a skill that can be used in GAMA.
+To use our plugin in gaml model, we have to create a species using the skill:
+species tutorialSpecies skills:[FirstSkill]{}
+Defining new attributes for the skill​
+Now we have a skill that is empty. So we need to add some variable for the plugin to have a purpose.
+To add new attributes to the species that declares this skill, we have to define them before the class using annotation like we did before.
+@variable​
+This annotations is used to describe a single variable or field.
+This annotation contains:
+
+name (String): the name of the variable as it can be used in GAML.
+type (int): The textual representation of the type of the variable (see IType).
+of (int, 0 by default): The textual representation of the content type of the variable (see IType#defaultContentType()).
+index (int, 0 by default): The textual representation of the index type of the variable (see IType#defaultKeyType()).
+constant (int, false by default): returns whether or not this variable should be considered as non modifiable.
+init (String, "" by default): the initial value of this variable as a String that will be interpreted by GAML.
+depend_on (set of Strings, empty by default): an array of String representing the names of the variables on which this variable depends (so that they are computed before).
+internal (boolean, false by default): return whether this var is for internal use only.
+doc (set of @doc, empty by default): the documentation associated to the variable.
+
+The @vars annotation contains a set of @variable elements.
+Just like we did before with the declaration of the name of our skill, we can declare globally the name of our incomming new variables, in the IKeyword class.
+String FIRST_VARIABLE = "FirstVariable";
+String SECOND_VARIABLE = "SecondVariable";
+Now that we have defined the names of our variables, we need to declare them in our skill class.
+Here is how to declare the variables:
+@vars({  @variable(name = IKeyword.FIRST_VARIABLE, type = IType.INT, init = "1"),  @variable(name = IKeyword.SECOND_VARIABLE, type = IType.FLOAT, init = "1.0")})
+In order to access these new attributes, in the GAMA application, you need to define @getter and  @setter methods:
+@getter​
+This annotations is used to indicate that a method is to be used as a getter for a variable defined in the class. The variable must be defined on its own (in vars).
+This annotation contains:
+
+value (String): the name of the variable for which the annotated method is to be considered as a getter.
+initializer (boolean, false by default): returns whether or not this getter should also be used as an initializer
+
+@setter​
+This annotations is used to indicate that a method is to be used as a setter for a variable defined in the class. The variable must be defined on its own (in vars).
+This annotation contains:
+
+value (String): the name of the variable for which the annotated method is to be considered as a setter.
+
+@getter(IKeyword.FIRST_VARIABLE)public int getFirstVariable(final IAgent agent) {    return (int) agent.getAttribute(IKeyword.FIRST_VARIABLE);}@setter(IKeyword.FIRST_VARIABLE)public void setFirstVariable(final IAgent agent, final int value) {    agent.setAttribute(IKeyword.FIRST_VARIABLE, value);}@getter(IKeyword.SECOND_VARIABLE)public double getFirstVariable(final IAgent agent) {    return (double) agent.getAttribute(IKeyword.SECOND_VARIABLE);}@setter(IKeyword.SECOND_VARIABLE)public void setFirstVariable(final IAgent agent, final double value) {    agent.setAttribute(IKeyword.SECOND_VARIABLE, value);}
+At this point we can use the variable defined directly in our agent :
+species tutorialSpecies skills:[FirstSkill]{	init	{		write(firstVariable);		write(SecondVariable);	}}
+Defining new actions​
+An action (also called primitive) is basically a Java method that can be called from the GAML language using the same syntax as the one used for calling actions defined in a model. The method should be annotated with @action, supplying the name of the action as it will be available in GAML.
+@action​
+This annotations is used to tag a method that will be considered as an action (or primitive) in GAML.
+The method must have the following signature: Object methodName(IScope) throws GamaRuntimeException and be contained in a class annotated with @species or @skill (or a related class, like a subclass or an interface).
+This annotation contains:
+
+name (String): the name of the variable as it can be used in GAML.
+virtual (boolean, false by default): if true the action is virtual, i.e. equivalent to abstract method in java.
+args (set of arg, empty by default): the list of arguments passed to this action. Each argument is an instance of arg.
+doc (set of @doc, empty by default): the documentation associated to the action.
+
+We can also define parameters for this action using the annotation @arg will a set of parameters names.
+@arg​
+This annotations describes an argument passed to an action.
+This annotation contains:
+
+name (String, "" by default): the name of the argument as it can be used in GAML.
+type (set of ints, empty by default): An array containing the textual representation of the types that can be taken by the argument (see IType).
+optional (boolean, true by default): whether this argument is optional or not.
+doc (set of @doc, empty by default): the documentation associated to the argument.
+
+Here is an example of an empty action for our skill (dont forget to define every keywords like IKeyword.NUMBER_TO_ADD in the IKeyword class):
+@action(name = "add", 		args = {			@arg(name = IKeyword.NUMBER_TO_ADD, type = IType.INT, optional = false)})@doc("Function to add a number to FirstVariable")public int add(final IScope scope){	return 0;}
+Now that we have defined the action we can access the parameter IKeyword.NUMBER_TO_ADD and use it as we want.
+Access to parameters in actions​
+To get the value of the arguments passed in GAML to the Java code, two methods can be useful:
+
+scope.hasArg("name_of_argument") returns a boolean value testing whether the argument "name_of_argument" has been defined by the modeler, since all the arguments to actions should be considered as optional.
+getArg(name_arg,IType), getFloatArg(name_param_of_float), getIntArg(name_param_of_int) and their variants return the value of the given parameter using a given (or predefined) type to cast it.
+
+Warnings​
+Developers should notice that:
+
+the method should have only one parameter: the scope (type IScope).
+the method can only throw GamaRuntimeExceptions. Other exceptions should be caught in the method and wrapped in a GamaRuntimeException before being thrown.
+
+Here is the complete action code :
+@action(name = "add", 		args = {			@arg(name = IKeyword.NUMBER_TO_ADD, type = IType.INT, optional = false)})@doc("Function to add a number to FirstVariable")public int add(final IScope scope){	int firstVariable = getVariable(scope.getAgent());	int numberToAdd = (Integer) scope.getArg(IKeyword.NUMBER_TO_ADD);	setVariable(scope.getAgent(), firstVariable + numberToAdd);	return firstVariable + numberToAdd;}
+It is called in GAMA models with:
+species tutorialSpecies skills:[FirstSkill]{	init	{		do add(5);		int result <- add(10);				write(firstVariable);		write(secondVariable);	}}
+For our action we used the annotation @doc to give a description of what the purpose of the action.
+@doc​
+It provides a unified way of attaching documentation to the various GAML elements tagged by the other annotations. The documentation is automatically assembled at compile time and also used at runtime in GAML editors.
+
+value (String, "" by default): a String representing the documentation of a GAML element.
+deprecated (String, "" by default): a String indicating (if it is not empty) that the element is deprecated and defining, if possible, what to use instead.
+returns (String, "" by default): the documentation concerning the value(s) returned by this element (if any)..
+comment (String, "" by default): an optional comment that will appear differently from the documentation itself.
+special_cases (set of Strings, empty by default): an array of String representing the documentation of the "special cases" in which the documented element takes part.
+examples (set of Strings, empty by default): an array of String representing some examples or use-cases about how to use this element.
+see (set of Strings, empty by default): an array of String representing cross-references to other elements in GAML.
+
+All these annotations are defined in the GamlAnnotations.java file of the msi.gama.processor plug-in.
+Complete java class​
+package skills;import msi.gama.common.interfaces.IKeyword;import msi.gama.metamodel.agent.IAgent;import msi.gama.precompiler.GamlAnnotations.action;import msi.gama.precompiler.GamlAnnotations.arg;import msi.gama.precompiler.GamlAnnotations.doc;import msi.gama.precompiler.GamlAnnotations.getter;import msi.gama.precompiler.GamlAnnotations.setter;import msi.gama.precompiler.GamlAnnotations.skill;import msi.gama.precompiler.GamlAnnotations.variable;import msi.gama.precompiler.GamlAnnotations.vars;import msi.gama.runtime.IScope;import msi.gaml.skills.Skill;import msi.gaml.types.IType;@vars({	  @variable(name = IKeyword.FIRST_VARIABLE, type = IType.INT, init = "1"),	  @variable(name = IKeyword.SECOND_VARIABLE, type = IType.FLOAT, init = "1.0")	})@skill(name = "FirstSkill")public class FirstSkill extends Skill{		@getter(IKeyword.FIRST_VARIABLE)	public int getFirstVariable(final IAgent agent) {	    return (Integer) agent.getAttribute(IKeyword.FIRST_VARIABLE);	}	@setter(IKeyword.FIRST_VARIABLE)	public void setFirstVariable(final IAgent agent, final int value) {		agent.setAttribute(IKeyword.FIRST_VARIABLE, value);	}	@getter(IKeyword.SECOND_VARIABLE)	public double getSecondVariable(final IAgent agent) {	    return (double) agent.getAttribute(IKeyword.SECOND_VARIABLE);	}		@setter(IKeyword.SECOND_VARIABLE)	public void setSecondVariable(final IAgent agent, final double value) {	    agent.setAttribute(IKeyword.SECOND_VARIABLE, value);	}		@action(name = "add", 			args = {					@arg(name = IKeyword.NUMBER_TO_ADD, type = IType.INT, optional = false)})	@doc("Function to add a number to FirstVariable")	public int add(final IScope scope)	{		int firstVariable = getFirstVariable(scope.getAgent());		int numberToAdd = (Integer) scope.getArg(IKeyword.NUMBER_TO_ADD);				setFirstVariable(scope.getAgent(), firstVariable + numberToAdd);				return firstVariable + numberToAdd;	}}
+Complete gaml model​
+/*** Name: FirstSkill* First skill tutorial. * Author: Lucas Grosjean, Julius Bangate* Tags: tutorial, skill*/model FirstSkillglobal{	init {		create tutorial;	}}species tutorial skills:[FirstSkill] {	init {		do add(5);		int result <- add(10);				write(firstVariable);		write(secondVariable);	}}experiment main{}

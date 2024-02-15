@@ -1,0 +1,42 @@
+Developing OperatorsOperators in the GAML language are used to compose complex expressions. An operator performs a function on one, two, or n operands (which are other expressions and thus may be themselves composed of operators) and returns the result of this function. Developing a new operator allows, then, to add a new function to GAML.
+Implementation​
+A new operator can be any Java method that:
+
+begins by the @operator (other fields can be added to the annotation): @operator(value = "name_of_the_operator_gaml"),
+
+@operator(value = "rgb")public static GamaColor rgb(final int r, final int g, final int b, final double alpha) {	
+The method:
+
+must return a value (that has to be one of the GAMA Type: Integer, Double, Boolean, String, IShape, IList, IGraph, IAgent...),
+can define any number of parameters, defined using Java type,
+can be either static or non-static:
+
+in the case it is static, the number of parameters (except an IScope attribute) of the method is equal to the number of operands of the GAML operator.
+in the case it is not static, a first operand is added to the operator with the type of the current class.
+
+
+can have a IScope parameter, that will be taken into account as operand of the operator.
+
+Annotations​
+@operator​
+This annotation represents an "operator" in GAML, and is used to define its name(s) as well as some meta-data that will be used during the validation process.
+This annotation contains:
+
+value (set of string, empty by default): names of the operator.
+content_type (integer) : if the operator returns a container, type of elements contained in the container
+can_be_const (boolean, false by default): if true: if the operands are constant, returns a constant value.
+category (set of string, empty by default): categories to which the operator belong (for documentation purpose).
+doc (set of @doc, empty by default): the documentation attached to this operator.
+
+@doc​
+It provides a unified way of attaching documentation to the various GAML elements tagged by the other annotations. The documentation is automatically assembled at compile time and also used at runtime in GAML editors.
+
+value (String, "" by default): a String representing the documentation of a GAML element.
+deprecated (String, "" by default): a String indicating (if it is not empty) that the element is deprecated and defining, if possible, what to use instead.
+returns (String, "" by default): the documentation concerning the value(s) returned by this element (if any)..
+comment (String, "" by default): an optional comment that will appear differently from the documentation itself.
+special_cases (set of Strings, empty by default): an array of String representing the documentation of the "special cases" in which the documented element takes part.
+examples (set of Strings, empty by default): an array of String representing some examples or use-cases about how to use this element.
+see (set of Strings, empty by default): an array of String representing cross-references to other elements in GAML.
+
+All these annotations are defined in the GamlAnnotations.java file of the msi.gama.processor plug-in.

@@ -1,0 +1,67 @@
+Organization of a modelAs already extensively detailed in the introduction page, defining a model in GAML amounts to defining a model species, which later allows to instantiate a model agent (aka a simulation), which may or may not contain micro-species, and which can be flanked by experiment plans in order to be simulated.
+This conceptual structure is respected in the definition of model files, which follows a similar pattern:
+
+Definition of the global species, preceded by a header, in order to represent the model species
+Definition of the different micro-species (either nested inside the global species or at the same level)
+Definition of the different experiment plans that target this model
+
+Table of contents​
+
+Model Header (model species)
+Import gaml file
+Species declarations
+Experiment declarations
+Basic skeleton of a model
+
+Model Header (model species)​
+The header of a model file begins with the declaration of the name of the model. Contrarily to other statements, this declaration does not end with a semi-colon.
+model name_of_the_model
+The name of the model is not necessarily the same as the name of the file. It must conform to the general rule for naming species, i.e. be a valid identifier (beginning with a letter, containing only letters, digits, and dashes). This name will be used for building the name of the model species, from which simulations will be instantiated. For instance, the following declaration:
+model dummy
+will internally create a species called dummy_model, child of the abstract species model, from which simulations (called dummy_model0, dummy_model1, etc.) will be instantiated.
+Import gaml file​
+This declaration is followed by optional import statements that indicate which other models this model is importing. Import statements do not end with a semi-colon.
+Importing a model can take two forms. The first one, called inheritance import, is declared as follows:
+import "relative_path_to_a_model_file"import "relative_path_to_another_model_file"
+The second one, called usage import, is declared as follows:
+import "relative_path_to_a_model_file" as model_identifier
+When importing models using the first form, all the declarations of the model(s) imported will be merged with those of the current model (in the order with which the import statements are declared, i.e. the latest definitions of global attributes or behaviors superseding the previous ones).
+The second form is reserved for using models as micro-models of the current model. This possibility is still experimental in the current version of GAMA.
+The last part of the header is the definition of the global species, which is the actual definition of the model species itself.
+global {    // Definition of [global attributes](GlobalSpecies#declaration), [actions and behaviors](DefiningActionsAndBehaviors)}
+Note that neither the imports nor the definition of global is mandatory. Only the model statement is.
+infoWhile importing a model, every file is concatenated. Therefore, every variable will be processed from the gaml file where the experiment is located.This might lead to some issues explained in #137 where relative path set in an imported file will be based on the model you're starting and not the file you defined it.
+Species declarations​
+The header is followed by the declaration of the different species of agents that populate the model.
+The special species global is the world species. You will declare here all the global attributes/actions/behaviors. The global species does not have a name, and is unique in your model.
+global {    // definition of global attributes, actions, behaviors}
+Regular species can be declared with the keyword species. You can declare several regular species, and they all have to be named. A species defines its attributes, actions and behaviors and aspects.
+species nameOfSpecies {	// definition of your species attributes, actions and behaviors and aspects}
+Note that the possibility to define the species after the global definition is actually a convenience: these species are micro-species of the model species and, hence, could be perfectly defined as nested species of global. For instance:
+global {    // definition of global attributes, actions, behaviors}species A {...}species B {...}
+is completely equivalent to:
+global {    // definition of [global attributes](GlobalSpecies#declaration), actions, behaviors    species A {...}    species B {...}}
+Experiment declarations​
+Experiments are usually declared at the end of the file. They start with the keyword experiment. They contains the simulation parameters, and the definition of the output (such as displays, monitors or inspectors). You can declare as many experiments as you want.
+experiment first_experiment {    // definition of parameters (intputs)    // definition of output    output {...}}experiment second_experiment {    // definition of parameters (inputs)    // definition of output}
+Note that you have four types of experiments:
+
+A GUI experiment allows you to display a graphical interface with input parameters and outputs. It is declared with the following structure:
+
+experiment gui_experiment type:gui {   [parameters]   [output]   [...]}
+
+A Batch experiment allows you to execute numerous successive simulation runs (often used for model exploration). It is declared with the following structure:
+
+experiment batch_experiment type:batch {   [parameters]   [exploration method]   [...]}
+
+A Test experiment allows you to write unit tests on a model (used to ensure its quality). It is declared with the following structure:
+
+experiment test_experiment type:test autorun: true {   [setup]   [tests]   [...]}
+
+A memorize experiment allows you to store each step of the simulation in memory and to backtrack to previous steps. It is declared with the following structure:
+
+experiment test_experiment type:memorize {   [parameters]   [output]   [...]}
+Basic skeleton of a model​
+Here is the basic skeleton of a model :
+model name_of_the_modelglobal {	// definition of [global attributes](GlobalSpecies#declaration), actions, behaviours}species my_specie {	// definition of attributes, actions, behaviors}experiment my_experiment /* + specify the type : "type:gui", "type:batch", "type:test", or "test:memorize" */{	// here the definition of your experiment, with...	// ... your inputs	output {		// ... and your outputs	}}
+Don't forget this structure! This will be the basis for all the models you will create from now.

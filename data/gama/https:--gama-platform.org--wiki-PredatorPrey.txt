@@ -1,0 +1,23 @@
+Predator PreyThis tutorial presents the structure of a GAMA model as well as the use of a grid topology. In particular, this tutorial shows how to define a basic model, to define "grid agents" which are able to move within the constraints. It also introduces the displays and agents' aspect.
+All the files related to this tutorial (images and models) are available in the Models Library (project Tutorials/Predator Prey).
+Content​
+Model Overview​
+In this model, three types of entities are considered: preys, predators and vegetation cells. Preys
+eat grass on the vegetation cells and predators eat preys. At each simulation step, grass grows on the vegetation cells. Concerning the predators and preys, at each simulation step, they move (to a neighbor cell), eat, die if they do not have enough energy, and eventually reproduce.
+
+Step List​
+This tutorial is composed of 13 steps corresponding to 13 models which are incremental representation of the same model, starting with the simplest model 1 and finishing with the latest one, model 13. For each step, we will present its purpose, an explicit formulation and the corresponding GAML code of the model.
+
+Basic model (prey agents)
+Dynamic of the vegetation (grid)
+Behavior of the prey agent
+Use of Inspectors/monitors
+Predator agents (parent species)
+Breeding of prey and predator agents
+Agent display (aspect)
+Complex behaviors for the preys and predators
+Adding of a stopping condition
+Definition of charts
+Writing files
+Image loading (raster data)
+Exploration of the model

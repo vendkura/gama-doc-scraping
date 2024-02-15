@@ -1,0 +1,9 @@
+3D TutorialThis tutorial introduces the 3D features offered by GAMA.
+Model Overview​
+
+Step List​
+This tutorial is composed of 3 steps corresponding to 3 models which are incremental representation of the same model, starting with the simplest model 1 and finishing with the latest one, model 3. For each step, we will present its purpose, an explicit formulation, and the corresponding GAML code.
+
+Basic model
+Moving cells
+Moving cells with neighbors

@@ -1,0 +1,213 @@
+Index of annotationsAnnotations are used to link Java methods and classes to GAML language.
+@action​
+This annotation is used to tag a method that will be considered as an action (or primitive) in GAML.
+The method must have the following signature: Object methodName(IScope) throws GamaRuntimeException and be contained in a class annotated with @species or @skill (or a related class, like a subclass or an interface).
+This annotation contains:
+
+name (String): the name of the variable as it can be used in GAML.
+virtual (boolean, false by default): if true the action is virtual, i.e. equivalent to abstract method in java.
+args (set of @arg, empty by default): the list of arguments passed to this action. Each argument is an instance of arg.
+doc (set of @doc, empty by default): the documentation associated to the action.
+
+@arg​
+This annotation describes an argument passed to an action.
+This annotation contains:
+
+name (String, "" by default): the name of the argument as it can be used in GAML.
+type (set of ints, empty by default): An array containing the textual representation of the types that can be taken by the argument (see IType).
+optional (boolean, true by default): whether this argument is optional or not.
+doc (set of @doc, empty by default): the documentation associated to the argument.
+
+@constant​
+This annotation is used to annotate fields that are used as constants in GAML.
+This annotation contains:
+
+category (set of Strings, empty by default): an array of strings, each representing a category in which this constant can be classified (for documentation indexes).
+value (String): a string representing the basic keyword for the constant. Does not need to be unique throughout GAML.
+altNames (set of Strings, empty by default): an Array of strings, each representing a possible alternative name for the constant. Does not need to be unique throughout GAML.
+doc (set of @doc, empty by default): the documentation attached to this constant.
+
+@doc​
+It provides a unified way of attaching documentation to the various GAML elements tagged by the other annotations. The documentation is automatically assembled at compile time and also used at runtime in GAML editors.
+This annotation contains:
+
+value (String, "" by default): a String representing the documentation of a GAML element.
+masterDoc (boolean, false by default): a boolean representing the fact that this instance of the operator is the master one, that is whether its value will subsume the value of all other instances of it.
+deprecated (String, "" by default): a String indicating (if it is not empty) that the element is deprecated and defining, if possible, what to use instead.
+returns (String, "" by default): the documentation concerning the value(s) returned by this element (if any)..
+comment (String, "" by default): an optional comment that will appear differently from the documentation itself.
+special_cases (set of Strings, empty by default): an array of String representing the documentation of the "special cases" in which the documented element takes part.
+examples (set of @example, empty by default): an array of String representing some examples or use-cases about how to use this element.
+usages (set of @usage, empty by default): An array of usages representing possible usage of the element in GAML.
+see (set of Strings, empty by default): an array of String representing cross-references to other elements in GAML.
+
+@example​
+This facet describes an example, that can be used either in the documentation, as unit test or as pattern.
+This annotation contains:
+
+value (String, "" by default): a String representing the expression as example.
+var (String, "" by default): The variable that will be tested in the equals, if it is omitted a default variable will be used.
+equals (String, "" by default): The value to which the value will be compared.
+returnType (String, "" by default): The type of the value that should be tested.
+isNot (String, "" by default): The value to which the value will be compared.
+raises (String, "" by default): The exception or warning that the expression could raise.
+isTestOnly (boolean, false by default): specifies that the example should not be included in the documentation.
+isExecutable (boolean, true by default): specifies that the example is correct GAML code that can be executed.
+test (boolean, true by default): specifies that the example is will be tested with the equals.
+isPattern (boolean, false by default): whether or not this example should be treated as part of a pattern (see @usage). If true, the developers might want to consider writing the example line (and its associated lines) using template variables (e.g. ${my_agent}).
+
+@facet​
+This facet describes a facet in a list of facets.
+This annotation contains:
+
+name (String): the name of the facet. Must be unique within a symbol.
+type (set of int): the string values of the different types that can be taken by this facet.
+values (set of Strings, empty by default): the values that can be taken by this facet. The value of the facet expression will be chosen among the values described here.
+optional (boolean, false by default): whether or not this facet is optional or mandatory.
+doc (set of @doc, empty by default): the documentation associated to the facet.
+
+@facets​
+This annotation describes a list of facets used by a statement in GAML.
+This annotation contains:
+
+value (set of @facet): array of @facet, each representing a facet name, type..
+ommissible (string): the facet that can be safely omitted by the modeler (provided its value is the first following the keyword of the statement).
+
+@file​
+This annotation is used to define a type of file.
+This annotation contains:
+
+name (String): a (human-understandable) string describing this type of files, suitable for use in composed operator names (e.g. "shape", "image"...). This name will be used to generate two operators: name+"file" and "is"+name. The first operator may have variants taking one or several arguments, depending on the @builder annotations present on the class.
+extensions (set of Strings): an array of extensions (without the '.' delimiter) or an empty array if no specific extensions are associated to this type of files (e.g. ["png","jpg","jpeg"...]). The list of file extensions allowed for this type of file. These extensions will be used to check the validity of the file path, but also to generate the correct type of file when a path is passed to the generic "file" operator.
+buffer_content (int, ITypeProvider.NONE by default): the type of the content of the buffer. Can be directly a type in IType or one of the constants declared in ITypeProvider (in which case, the content type is searched using this provider).
+buffer_index (int, ITypeProvider.NONE by default): the type of the index of the buffer. Can be directly a type in IType or one of the constants declared in ITypeProvider (in which case, the index type is searched using this provider).
+buffer_type (int, ITypeProvider.NONE by default): the type of the buffer. Can be directly a type in IType or one of the constants declared in ITypeProvider (in which case, the type is searched using this provider).
+doc (set of @doc, empty by default): the documentation attached to this operator.
+
+@getter​
+This annotation is used to indicate that a method is to be used as a getter for a variable defined in the class. The variable must be defined on its own (in vars).
+This annotation contains:
+
+value (String): the name of the variable for which the annotated method is to be considered as a getter.
+initializer (boolean, false by default): returns whether or not this getter should also be used as an initializer
+
+@inside​
+This annotation is used in conjunction with @symbol. It provides a way to tell where this symbol should be located in a model (i.e. what its parents should be). Either direct symbol names (in symbols) or generic symbol kinds can be used.
+This annotation contains:
+
+symbols (set of Strings, empty by default): symbol names of the parents.
+kinds (set of int, empty by default): generic symbol kinds of the parents (see ISymbolKind.java for more details).
+
+@operator​
+This annotation represents an "operator" in GAML and is used to define its name(s) as well as some meta-data that will be used during the validation process.
+This annotation contains:
+
+value (set of Strings, empty by default): names of the operator.
+category (set of string, empty by default): categories to which the operator belongs (for documentation purpose).
+iterator (boolean, false by default): true if this operator should be treated as an iterator (i.e.requires initializing the special variable "each" of WorldSkill within the method).
+can_be_const (boolean, false by default): if true: if the operands are constant, returns a constant value.
+content_type (int, ITypeProvider.NONE by default): the type of the content if the returned value is a container. Can be directly a type in IType or one of the constants declared in ITypeProvider (in which case, the content type is searched using this provider).
+index_type (int, ITypeProvider.NONE by default): the type of the index if the returned value is a container. Can be directly a type in IType or one of the constants declared in ITypeProvider (in which case, the index type is searched using this provider).
+expected_content_type (set of int, empty by default): if the argument is a container, returns the types expected for its contents. Should be an array of IType.XXX.
+type (int, ITypeProvider.NONE by default): the type of the expression if it cannot be determined at compile time (i.e. when the return type is "Object"). Can be directly a type in IType or one of the constants declared in ITypeProvider (in which case, the type is searched using this provider)..
+internal (boolean, false by default): returns whether this operator is for internal use only.
+doc (set of @doc, empty by default): the documentation attached to this operator.
+
+@serializer​
+It allows to declare a custom serializer for Symbols (statements, var declarations, species, experiments, etc.). This serializer will be called instead of the standard serializer, superseding this last one. Serializers must be subclasses of the SymbolSerializer class.
+
+value (Class): the serializer class.
+
+@setter​
+This annotation is used to indicate that a method is to be used as a setter for a variable defined in the class. The variable must be defined on its own (in vars).
+This annotation contains:
+
+value (String): the name of the variable for which the annotated method is to be considered as a setter.
+
+@skill​
+This annotation allows to define a new skill (class grouping variables and actions that can be used by agents).
+This annotation contains:
+
+name (String): a String representing the skill name in GAML (must be unique throughout GAML).
+attach_to (set of strings): an array of species names to which the skill will be automatically added (complements the "skills" parameter of species).
+internal (boolean, false by default): return whether this skill is for internal use only.
+doc (set of @doc, empty by default): the documentation associated to the skill.
+
+@species​
+This annotation represents a "species" in GAML. The class annotated with this annotation will be the support of a species of agents.
+This annotation contains:
+
+name (string): the name of the species that will be created with this class as base. Must be unique throughout GAML.
+skills (set of strings, empty by default): An array of skill names that will be automatically attached to this species. Example:  @species(value="animal" skills={"moving"})
+internal (boolean, false by default): whether this species is for internal use only.
+doc (set of @doc, empty by default): the documentation attached to this operator.
+
+@symbol​
+This annotation represents a "statement" in GAML and is used to define its name(s) as well as some meta-data that will be used during the validation process.
+This annotation contains:
+
+name (set of string, empty by default): names of the statement.
+kind (int): the kind of the annotated symbol (see ISymbolKind.java for more details).
+with_scope (boolean, true by default): indicates if the statement (usually a sequence) defines its own scope. Otherwise, all the temporary variables defined in it are actually defined in the super-scope.
+with_sequence (boolean): indicates whether or not a sequence can or should follow the symbol denoted by this class.
+with_args (boolean, false by default): indicates whether or not the symbol denoted by this class will accept arguments.
+remote_context (boolean, false by default): indicates that the context of this statement is actually a hybrid context: although it will be executed in a remote context, any temporary variables declared in the enclosing scopes should be passed on as if the statement was executed in the current context.
+doc (set of @doc, empty by default): the documentation attached to this symbol.
+internal (boolean, false by default): returns whether this symbol is for internal use only.
+unique_in_context (boolean, false by default): Indicates that this statement must be unique in its super context (for example, only one return is allowed in the body of an action)..
+unique_name (boolean, false by default): Indicates that only one statement with the same name should be allowed in the same super context.
+
+@type​
+It provides information necessary to the processor to identify a type.
+This annotation contains:
+
+name (String, "" by default): a String representing the type name in GAML.
+id (int, 0 by default): the unique identifier for this type. User-added types can be chosen between IType.AVAILABLE_TYPES and IType.SPECIES_TYPES (exclusive) (cf. IType.java).
+wraps (tab of Class, null by default): the list of Java Classes this type is "wrapping" (i.e. representing). The first one is the one that will be used preferentially throughout GAMA. The other ones are to ensure compatibility, in operators, with compatible Java classes (for instance, List and GamaList).
+kind (int, ISymbolKind.Variable.REGULAR by default): the kind of Variable used to store this type. See ISymbolKind.Variable.
+internal (boolean, false by default): whether this type is for internal use only.
+doc (set of @doc, empty by default): the documentation associated to the facet.
+
+@usage​
+This replaces @special_cases and @examples, and unifies the doc for operators, statements, and others.
+An @usage can also be used for defining a template for a GAML structure, and in that case, requires the following to be defined:
+
+A name (attribute "name"), optional, but better
+A description (attribute "value"), optional
+A menu name (attribute "menu"), optional
+A hierarchical path within this menu (attribute "path"), optional
+A pattern (attribute "pattern" or concatenation of the @example present in "examples" that define "isPattern" as true)
+
+This annotation contains:
+
+value (String): a String representing one usage of the keyword. Note that for usages aiming at defining templates, the description is displayed on a tooltip in the editor. The use of the path allows to remove unnecessary explanations. For instance, instead of writing: description="This template illustrates the use of a complex form of the "create" statement, which reads agents from a shape file and uses the tabular data of the file to initialize their attributes", choose: name="Create agents from shapefile" menu=STATEMENT; path={"Create", "Complex forms"} description="Read agents from a shape file and initialize their attributes". If no description is provided, GAMA will try to grab it from the context where the template is defined (in the documentation, for example).
+menu (String, "" by default): Define the top-level menu where this template should appear. Users are free to use other names than the provided constants if necessary (i.e. "My templates"). When no menu is defined, GAMA tries to guess it from the context where the template is defined.
+path (set of Strings, empty by default): The path indicates where to put this template in the menu. For instance, the following annotation: " menu = STATEMENT; path = {"Control", "If"} will put the template in a menu called "If", within "Control", within the top menu "Statement". When no path is defined, GAMA will try to guess it from the context where the template is defined (i.e. keyword of the statement, etc.)
+name (String, "" by default): The name of the template should be both concise (as it will appear in a menu) and precise (to remove ambiguities between templates).
+examples (set of @example, empty by default): An array of String representing some examples or use-cases about how to use this element, related to the particular usage above.
+pattern (String, "" by default): Alternatively, the contents of the usage can be described using a @pattern (rather than an array of @example). The formatting of this string depends entirely on the user (e.g. including \n and \t for indentation, for instance).
+
+@validator​
+It allows to declare a custom validator for Symbols (statements, var declarations, species, experiments, etc.). This validator, if declared on subclasses of Symbol, will be called after the standard validation is done. The validator must be a subclass of IDescriptionValidator.
+
+value (Class): the validator class.
+
+@variable​
+This annotation is used to describe a single variable or field.
+This annotation contains:
+
+name (String): the name of the variable as it can be used in GAML.
+type (int): The textual representation of the type of the variable (see IType).
+of (int, 0 by default): The textual representation of the content type of the variable (see IType#defaultContentType()).
+index (int, 0 by default): The textual representation of the index type of the variable (see IType#defaultKeyType()).
+constant (boolean, false by default): returns whether or not this variable should be considered as non modifiable.
+init (String, "" by default): the initial value of this variable as a String that will be interpreted by GAML.
+depend_on (set of Strings, empty by default): an array of String representing the names of the variables on which this variable depends (so that they are computed before).
+internal (boolean, false by default): return whether this var is for internal use only.
+doc (set of @doc, empty by default): the documentation associated to the variable.
+
+@vars​
+This annotation is used to describe a set of variables or fields.
+This annotation contains:
+
+value (set of @var): an Array of var instances, each representing a variable.

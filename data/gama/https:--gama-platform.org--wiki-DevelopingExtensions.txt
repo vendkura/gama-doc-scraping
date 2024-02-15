@@ -1,0 +1,53 @@
+Developing ExtensionsGAMA accepts extensions to the GAML language, defined by external programmers and dynamically loaded by the platform each time it is run. Extensions can represent new built-in species, types, file-types, skills, operators, statements, new control architectures or even types of displays. Other internal structures of GAML will be progressively "opened" to this mechanism in the future: display layers (hardwired for the moment), new types of outputs (hardwired for the moment), scheduling policies (hardwired for the moment), random number generators (hardwired for the moment).
+The extension mechanism relies on two complementary techniques:
+
+the first one consists in defining the GAML extensions in a plug-in (in the OSGI sense, see here) that will be loaded by GAMA at runtime and must "declare" that it is contributing to the platform.
+the second one is to indicate to GAMA where to look for extensions, using Java annotations that are gathered at compile time (some being also used at runtime) and directly compiled into GAML structures.
+
+The following sections describe this extension process.
+
+
+
+Developing Plugins
+
+
+
+
+Developing Skills
+
+
+
+
+Developing Statements
+
+
+
+
+Developing Operators
+
+
+
+
+Developing Types
+
+
+
+
+Developing Species
+
+
+
+
+Developing Control Architectures
+
+
+
+
+IScope
+
+
+
+
+Index of annotations
+
+

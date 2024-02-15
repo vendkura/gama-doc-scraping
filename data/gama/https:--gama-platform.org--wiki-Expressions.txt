@@ -1,0 +1,2 @@
+ExpressionsExpressions in GAML are the value part of the statements' facets. They represent or compute data that will be used as the value of the facet when the statement will be executed.
+An expression can be either a literal, a unit, a constant, a variable, an attribute or the application of one or several operators to compose a complex expression.

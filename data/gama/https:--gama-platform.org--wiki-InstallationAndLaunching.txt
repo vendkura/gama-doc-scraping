@@ -1,0 +1,8 @@
+Installation and LaunchingThe GAMA platform can be easily installed on your machine: Windows, macOS or Ubuntu. Depending on user needs, GAMA can then be extended by using a number of additional plugins.
+This part is dedicated to explain how to install GAMA, launching GAMA and extend the platform by installing additional plugins. All the known issues concerning installation are also explained. The GAMA team provides you a continuous support by proposing corrections to some serious issues through updating patchs. In this part, we will also briefly present another way to launch GAMA without any GUI : the headless mode.
+
+Installation
+Launching GAMA
+Headless Mode
+Updating GAMA
+Installing Plugins
